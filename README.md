@@ -1,7 +1,8 @@
-----
-Auteur 01 : Sofiane AGOUNI KACI
-Auteur 02 : Aghilas OULD BRAHAM
-----
+**Auteurs**  
+- **Auteur 1** : Sofiane AGOUNI KACI  
+- **Auteur 2** : Aghilas OULD BRAHAM
+
+***
 <h3 align="center">TP : Programmation Distribué</h3>
 
 <p align="center"><i>Cloud native</i></p>
@@ -24,3 +25,4 @@ Auteur 02 : Aghilas OULD BRAHAM
        <img alt="Kubernetes version" src="https://img.shields.io/badge/Kubernetes-v1.21+-326CE5?logo=kubernetes&logoColor=white">
     </a>
 </p>
+***
