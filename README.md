@@ -26,13 +26,13 @@
     <a href="https://kubernetes.io/">
        <img alt="Kubernetes version" src="https://img.shields.io/badge/Kubernetes-v1.21+-326CE5?logo=kubernetes&logoColor=white">
     </a>
-    <a href="https://www.postgresql.org/" title="PostgreSQL v15+">
+    <a href="https://www.postgresql.org/" title="PostgreSQL v14">
    <img
     alt="PostgreSQL version"
     src="https://img.shields.io/badge/PostgreSQL-v15%2B-4169E1?logo=postgresql&logoColor=white"
   >
   </a>
-  <a href="https://istio.io/" title="Istio v1.19+">
+  <a href="https://istio.io/" title="Istio v1.19">
   <img
     alt="Istio version"
     src="https://img.shields.io/badge/Istio-v1.19%2B-505A5F?logo=istio&logoColor=white"
