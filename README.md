@@ -5,9 +5,9 @@
 **Date** : 2024 - 2025
 
 ****
-<h3 align="center">TP : Programmation Distribué</h3>
+<h3 align="center">Projet : Microservices</h3>
 
-<p align="center"><i>Cloud native</i></p>
+<p align="center"><i>LLM & OCR</i></p>
 <p align="center"
     <a href="https://www.u-paris.fr/">
        <img alt="Université Paris Cité" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Logo_Universit%C3%A9_Paris-Cit%C3%A9_%28partenariat_Wikim%C3%A9dia%29.svg/1024px-Logo_Universit%C3%A9_Paris-Cit%C3%A9_%28partenariat_Wikim%C3%A9dia%29.svg.png" width="100">
