@@ -78,7 +78,7 @@ kubectl describe pod postgres-XXXXXXXXXXXXX # avoir plus d'infos
 
 ### Auth_service
 
-👉 [deploiment.yml](/deploiment.yml)
+👉 [deploiment.yml](../deploiment.yml)
 * **Deployer le service authentification :**
 ````sh
 kubectl apply -f deploiment.yml
@@ -86,12 +86,12 @@ kubectl apply -f deploiment.yml
 
 ![dep_auth](../IMAGES/dep_auth.png)
 
-![dep_info](/IMAGES/info_dep.png)
+![dep_info](../IMAGES/info_dep.png)
 
 ### Teste
 * **Récupérer l'adresse du service :** ``minikube service auth-service --url``
   
-![ip](/IMAGES/ip.png)
+![ip](../IMAGES/ip.png)
 
 * **Lancer le service avec minikube :** ``minikube service auth-service``
 * 
@@ -103,6 +103,6 @@ kubectl apply -f deploiment.yml
 |-----------|--------------|-------------|---------------------------|
 ````
 
-![teste](/IMAGES/teste_01.png)
+![teste](../IMAGES/teste_01.png)
 
 ****
