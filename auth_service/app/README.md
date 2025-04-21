@@ -9,7 +9,7 @@
 docker-compose up --build
 ````
 
-![images_docker](/IMAGES/images.png)
+![images_docker](../IMAGES/images.png)
 
 ### BDD
 * **Les migrations**
@@ -27,22 +27,22 @@ docker exec -it postgres_container psql -U postgres -d auth_db -c "\d users"
 ### Teste en local
 * **Afficher les container**
 
-![docker_ps](/IMAGES/docker_ps.png)
+![docker_ps](../IMAGES/docker_ps.png)
 
-* **Acceder au service** : Lien 👉 [localhost:5000](http://127.0.0.1:5000/)
+* **Acceder au service** : Lien 👉 [localhost:5000/](http://127.0.0.1:5000/)
   
 * **Se connecter avec un compte qui n'existe pas encore**
 
-![login1](/IMAGES/login1.png)
+![login1](../IMAGES/login1.png)
 
 * **Creer un compte et s'y connecter**
 
-![login2](/IMAGES/login2.png)
+![login2](../IMAGES/login2.png)
 
 * **Dans la table users**
   * ``docker exec -it postgres_container psql -U postgres -d auth_db -c "SELECT * FROM users;"``
 
-![users](/IMAGES/users.png)
+![users](../IMAGES/users.png)
 
 # Docker Hub
 * **Tag l'image docker :** ``docker tag 9d997cc3acfb aghilasob/auth_app:01 ``
@@ -74,7 +74,7 @@ kubectl get pod
 kubectl describe pod postgres-XXXXXXXXXXXXX # avoir plus d'infos 
 ````
 
-![dep_psql](/IMAGES/Psql.png)
+![dep_psql](../IMAGES/Psql.png)
 
 ### Auth_service
 
@@ -84,7 +84,7 @@ kubectl describe pod postgres-XXXXXXXXXXXXX # avoir plus d'infos
 kubectl apply -f deploiment.yml
 ````
 
-![dep_auth](/IMAGES/dep_auth.png)
+![dep_auth](../IMAGES/dep_auth.png)
 
 ![dep_info](/IMAGES/info_dep.png)
 
