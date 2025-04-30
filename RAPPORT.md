@@ -72,6 +72,8 @@ Service OCR (sof)
 ****
 # Structure du Projet
 
+![schema](auth_service/IMAGES/schema.png)
+
 ****
 # Etapes : Conception de l’application selon les 15 facteurs
 
