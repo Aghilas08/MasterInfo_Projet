@@ -121,7 +121,7 @@ Service OCR (sof)
   # POSTGRES_USER, POSTGRES_DB en clair
   # POSTGRES_PASSWORD via un Secret Kubernetes sécurisé.
   ````
-  - Monte un volume persistant à /var/lib/postgresql/data pour stocker les données durablement.
+  - Monte un volume persistant à ``/var/lib/postgresql/data`` pour stocker les données durablement.
   - Numéro de port : ``5432``
 
 
