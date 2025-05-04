@@ -1,0 +1,163 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  labels:
+    app: auth-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+      - name: auth-service
+        image: aghilasob/auth_app:01
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        env:
+        - name: DB_HOST
+          value: "postgres" # nom du service postgresql
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgresql-db
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgresql-user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgresql-password
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: auth-service
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-service
+  labels:
+    app: llm-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: llm-service
+  template:
+    metadata:
+      labels:
+        app: llm-service
+    spec:
+      containers:
+      - name: llm-service
+        image: aghilasob/llm_app:01
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5001
+        env:
+        - name: WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: llm-secret
+              key: WEBHOOK_URL
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llm-service
+spec:
+  selector:
+    app: llm-service
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 5001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ocr-service
+  labels:
+    app: ocr-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ocr-service
+  template:
+    metadata:
+      labels:
+        app: ocr-service
+    spec:
+      containers:
+      - name: ocr-container
+        image: aghilasob/ocr_app:01
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5002
+        env:
+        - name: GEMINI_AI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ocr-secret
+              key: GEMINI_AI_API_KEY
+        volumeMounts:
+        - name: upload-volume
+          mountPath: /app/uploads
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+      volumes:
+      - name: upload-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ocr-service
+spec:
+  selector:
+    app: ocr-service
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 5002
