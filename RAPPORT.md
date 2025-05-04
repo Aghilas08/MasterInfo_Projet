@@ -110,7 +110,7 @@ Ce microservice permet l’extraction de contenu **LaTeX** à partir de **docume
 ****
 # Structure du Projet
 
-![schema](auth_service/IMAGES/schema.png)
+![schema](/IMAGES/schema.png)
 
 ****
 # Etapes : Conception de l’application selon les 15 facteurs
@@ -180,15 +180,17 @@ Ce microservice permet l’extraction de contenu **LaTeX** à partir de **docume
 
 **a. Informations**
 
-![pods](auth_service/IMAGES/Psql/pod.png)
+![pods](/IMAGES/Psql/pod.png)
 
-![desc](auth_service/IMAGES/Psql/desc.png)
+![desc](/IMAGES/Psql/desc.png)
 
 **b. Ouvrire un terminal dans le pod**
+
 **c. s'y conncter**
+
 **d. Afficher les BDD**
 
-![teste_dep_psql](auth_service/IMAGES/Psql/teste_psql.png)
+![teste_dep_psql](/IMAGES/Psql/teste_psql.png)
 
 <span style="color:red">Remarque :
 - Toujours déployer le service PostgeSQL en premier.
@@ -228,22 +230,22 @@ Ce microservice permet l’extraction de contenu **LaTeX** à partir de **docume
 
 Le déploiment du service d'authentification (auth-service) avec **2 réplicas**, connectée à une base PostgreSQL via des variables d’environnement sécurisées issues d’un Secret. Elle expose le service sur le port **80** (redirection vers le port 5000 de l’application) avec un type **LoadBalancer**, ce qui permet un accès externe. L’image Docker utilisée est **aghilasob/auth_app:01**. Des ressources CPU et mémoire sont également réservées.
 
-![deploimet_dashbord](auth_service/IMAGES/Psql/dashbord.png)
+![deploimet_dashbord](/IMAGES/Psql/dashbord.png)
 
 ###### Teste
 
 **a. creation d'un nouvel utilisateur :** ✅
 
-![teste](auth_service/IMAGES/Psql/teste2.png)
+![teste](/IMAGES/Psql/teste2.png)
 
 **b. creation d'un utilisateur qui existe déja :** ❌
 
-![teste](auth_service/IMAGES/Psql/teste3.png)
+![teste](/IMAGES/Psql/teste3.png)
 
 
 **c. se connecter avec un utilisateur qui n'existe pas :** ❌ 
 
-![teste](auth_service/IMAGES/Psql/teste1.png)
+![teste](/IMAGES/Psql/teste1.png)
 
 ###### Améloiration future
 
