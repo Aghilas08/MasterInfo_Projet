@@ -1,0 +1,15 @@
+{'messages': [{'role': 'user', 'content': 'Les soldats sautent du bateau.'}, {'role': 'assistant', 'content': 'La d-ǧǧelliben yiserdasen seg uɣerrabu.'}]}
+{'messages': [{'role': 'user', 'content': 'Mon fils joue de la musique.'}, {'role': 'assistant', 'content': 'Mmi yetturar aẓawan.'}]}
+{'messages': [{'role': 'user', 'content': 'Il a fait du deltaplane.'}, {'role': 'assistant', 'content': 'Iga ifrilli.'}]}
+{'messages': [{'role': 'user', 'content': "Il peut l'avoir dit."}, {'role': 'assistant', 'content': 'Yezmer ad yili yenna-t-id.'}]}
+{'messages': [{'role': 'user', 'content': 'Elle continue.'}, {'role': 'assistant', 'content': 'La tettkemmil.'}]}
+{'messages': [{'role': 'user', 'content': 'Le lac est profond ici.'}, {'role': 'assistant', 'content': 'Agelmim d alqayan da.'}]}
+{'messages': [{'role': 'user', 'content': "Qu'appelle-t-on hasard ?"}, {'role': 'assistant', 'content': 'D acu i wumi nettini agacur ?'}]}
+{'messages': [{'role': 'user', 'content': '«\xa0Il est 9h\xa0», dit-il.'}, {'role': 'assistant', 'content': 'Yewweḍ usrag ɣer wis ṭam, i d-yenna.'}]}
+{'messages': [{'role': 'user', 'content': 'Les gens ne veulent pas comprendre.'}, {'role': 'assistant', 'content': 'Imdanen ugin ad gzun.'}]}
+{'messages': [{'role': 'user', 'content': "Yanni a accepté d'aider."}, {'role': 'assistant', 'content': 'Yeqbel Yanni tallalt.'}]}
+{'messages': [{'role': 'user', 'content': 'Trouve-toi un vrai boulot.'}, {'role': 'assistant', 'content': 'Af-d amahil n tidet.'}]}
+{'messages': [{'role': 'user', 'content': 'Libérez les animaux de leurs cages !'}, {'role': 'assistant', 'content': 'Slellim-d iɣersiwen seg lqefs-nsen !'}]}
+{'messages': [{'role': 'user', 'content': 'Libérez les animaux de leurs cages !'}, {'role': 'assistant', 'content': 'Slellimt-d iɣersiwen seg lqefs-nsen !'}]}
+{'messages': [{'role': 'user', 'content': "Combien d'heures durera le voyage?"}, {'role': 'assistant', 'content': 'Acḥal n yisragen ara yenzeg usikel ?'}]}
+{'messages': [{'role': 'user', 'content': 'Je parle français et anglais.'}, {'role': 'assistant', 'content': 'Ttmeslayeɣ tafransit akked tanglizit.'}]}
