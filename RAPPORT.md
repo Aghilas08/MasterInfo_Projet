@@ -236,7 +236,7 @@ Le déploiment du service d'authentification (auth-service) avec **2 réplicas**
 
 ![teste](auth_service/IMAGES/Psql/teste2.png)
 
-**a. creation d'un utilisateur qui existe déja :** ❌
+**b. creation d'un utilisateur qui existe déja :** ❌
 
 ![teste](auth_service/IMAGES/Psql/teste3.png)
 
@@ -287,6 +287,16 @@ Le déploiment du service d'authentification (auth-service) avec **2 réplicas**
 
 Le service LLM est conteneurisé via **Docker** et exposé sur **le port 5001**. En production, il est déployé avec **Kubernetes** à l’aide de **2 réplicas** et un Service de type **LoadBalancer** pour permettre un accès externe. L’URL du webhook externe (**WEBHOOK_URL**) est stockée de manière sécurisée dans un Secret Kubernetes. L’image Docker utilisée est **aghilasob/llm_app:01**.
 
+###### Teste
+
+**a. ecrire une requete :** ✅
+
+![teste](/IMAGES/test_llm.png)
+
+**b. aucun message par l'utilisateur :** ❌
+
+![teste](/IMAGES/llm_erreur.png)
+
 # 3 -  Microservice OCR
 
 ###### Fonctionnalités principales :
@@ -313,6 +323,7 @@ La clé API Gemini est lue depuis la variable d’environnement **GEMINI_AI_API_
 
 ##### Prompt :
 ````python
+
 prompt = (
 """Tu dois convertir ce document PDF en un fichier LaTeX complet, structuré et compilable.
 
