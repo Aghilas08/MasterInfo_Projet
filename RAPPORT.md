@@ -359,7 +359,7 @@ Retourne uniquement le **code source LaTeX** complet, sans aucune explication.
 * Le service écoute sur **le port 5002**, redirigé depuis le port 80 pour l’accès web.
 
 # Limitation des ressources
-###### IMPORTANT : vu que tous les services tournent en locale avec "minikube" on a du limiter les ressources (CPU , RAM) pour les services.
+###### IMPORTANT : vu que tous les services tournent en locale avec "minikube" on a du limiter les ressources (CPU , RAM) pour le déploiment des services.
 ````sh
         resources:
           limits:
