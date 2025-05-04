@@ -363,11 +363,15 @@ Retourne uniquement le **code source LaTeX** complet, sans aucune explication.
 
 * L’image Docker : **aghilasob/ocr_app:01**.
 
-* Le dossier **uploads** est monté dans le conteneur, et peut être lié à un volume persistant si nécessaire.
+* Le dossier **uploads** est monté dans le conteneur, **emptyDir** : répertoire temporaire pour stocker les PDF uploadés..
 
 * Les variables sensibles (clé Gemini API) sont injectées via un Secret Kubernetes.
 
 * Le service écoute sur **le port 5002**, redirigé depuis le port 80 pour l’accès web.
+
+###### Teste
+
+![ocr_teste_kb](/IMAGES/ocr_kb.png)
 
 # Limitation des ressources
 ###### IMPORTANT : vu que tous les services tournent en locale avec "minikube" on a du limiter les ressources (CPU , RAM) pour le déploiment des services.
