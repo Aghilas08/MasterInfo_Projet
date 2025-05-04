@@ -384,5 +384,8 @@ Retourne uniquement le **code source LaTeX** complet, sans aucune explication.
             cpu: "200m"
             memory: "256Mi"
 ````
+# Minikube dashbord
+
+![ts_les_services_dep](/IMAGES/dashbaord.png)
 
 ****
