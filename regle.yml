@@ -1,10 +1,19 @@
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: default-destination-rule
   namespace: default
 spec:
-  host: "*.default.svc.cluster.local"
+  host: '*.default.svc.cluster.local'
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default-peerauth
+  namespace: default
+spec:
+  mtls:
+    mode: STRICT
