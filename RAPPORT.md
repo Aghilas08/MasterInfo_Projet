@@ -608,13 +608,13 @@ kubectl rollout restart deployment ocr-service
 
 * **Appliquer une DestinationRule** :
 ````yaml
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: default-destination-rule
   namespace: default
 spec:
-  host: "*.default.svc.cluster.local"
+  host: '*.default.svc.cluster.local'
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL
