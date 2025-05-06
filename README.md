@@ -1,8 +1,6 @@
 
 # Microservices Cloud Native
 
-## Une architecture moderne pour vos besoins d'authentification et de traitement de données
-
 Notre plateforme, basée sur une architecture microservices avec Kubernetes, offre trois services sécurisés :
 
 ### Service d'Authentification
