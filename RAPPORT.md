@@ -391,3 +391,266 @@ Retourne uniquement le **code source LaTeX** complet, sans aucune explication.
 ![ts_les_services_dep](/IMAGES/dashbaord.png)
 
 ****
+# Gateway via istio
+````yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: api-gateway
+  namespace: istio-system     
+spec:
+  selector:
+    istio: ingressgateway       # pod istio ingress
+  servers:
+  - port:
+      number: 80      # accept que le trafic HTTP sur le port 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"            # accepte les requetes pour ts les hote
+````
+* **le but** : ouvrir un point d’entrée unique **ingress** sur le cluster pour tout le trafic HTTP externe.
+
+![infos_gateway](/IMAGES/info-gw.png)
+
+# Le VirtualService
+````yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: services-routing
+  namespace: default
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - istio-system/api-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: auth-service
+        port:
+          number: 80
+          .
+          .
+          .
+````
+* **Le but** : une fois le trafic entré via le Gateway ; router chaque requete vers les back‑end (auth-service, llm-service, ocr-service).
+
+* **Comment ça marche :**
+
+  * Le client envoie une requête HTTP..
+  * Istio Ingress Gateway capte cette requête (via la gateway).
+  * VirtualService examine l’URI et applique :
+
+    - une réécriture si besoin,
+    - une règle de routage vers auth-service, llm-service ou ocr-service .
+  
+  * le pod de destination reçoit la requête et la transmet à ton conteneur.
+  
+![virtual_service](/IMAGES/VS.png)
+
+# Teste les trois services
+* **Mise a jour home.html du service "authentification"** :
+````html
+        <div class="choices">
+            <a href="http://localhost:8081/"><button>Python</button></a>
+            <a href="http://localhost:8082/"><button>LateX-PDF</button></a>
+        </div>
+````
+* **rediréction** :
+  * 8080:80  pour accéder à auth-service via http://localhost:8080, qui redirige vers le port 80 du service dans le cluster.
+
+  * 8081:80 pour accder à llm-service sur http://localhost:8081.
+
+  * 8082:80 pour l'accès à ocr-service sur http://localhost:8082.
+
+````shell
+kubectl -n default port-forward svc/auth-service 8080:80 &
+kubectl -n default port-forward svc/llm-service 8081:80 &
+kubectl -n default port-forward svc/ocr-service 8082:80 &
+````
+
+![service_auth](/IMAGES/service3.png)
+
+![service_llm](/IMAGES/service2.png)
+
+![service_ocr](/IMAGES/service1.png)
+
+****
+
+# Sécuriser le cluster
+### RBAC Kubernetes
+
+**1. ServiceAccounts :** Les ServiceAccounts **auth-sacc, llm-sacc et ocr-sacc** ont pour but de donner à chacun des services une identité distincte dans le cluster, sur laquelle on pourras appliquer des politiques RBAC.
+````yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: auth-sacc
+  namespace: default
+    .
+    .
+    .
+````
+
+![service_account](/IMAGES/seracc.png)
+
+
+* **no** : signifie simplement que **ServiceAccount n’a aucun droit sur la ressource pods** tant que il n y’as pas de Role/RoleBinding
+
+* il faut les ajouter dans le deploiment.
+ 
+**2. Roles** :
+
+* **get** : Récupérer un objet unique (exp : ``kubectl get pod <nom-pod>``)
+* **list** : Lister tous les objets d’un type (exp: ``kubectl get pods``).
+  
+* ``kubectl apply -f serviceaccount.yml``
+* ``kubectl apply -f deploiment.yml``
+* ``kubectl apply -f roles.yml ``
+
+![roles](/IMAGES/test_role.png)
+
+### HTTPS
+* **Générer un certificat TLS**
+  * **Créeation du répertoire et génération d'une paire clé / certificat auto‑signé** :
+    ````sh
+    #  le dossier
+      mkdir -p certs
+
+    # Générer une clé privée et un certificat auto‑signé valable 1 an
+      openssl req -x509 \
+        -nodes \
+        -newkey rsa:2048 \
+        -keyout tls.key \
+        -out tls.crt \
+        -days 365 \
+        -subj "/CN=api.m1info.com/O=upc"
+
+    ````
+
+  * **Créeation du Secret Kubernetes TLS**
+  ````sh
+  kubectl -n istio-system create secret tls tls-secret \
+    --cert=./certs/tls.crt \
+    --key=./certs/tls.key
+
+  ````
+
+* **Mettre à jour le Gateway Istio & Virtalservice** :
+
+  * **Redirection automatique HTTP → HTTPS** :
+  ````yaml
+    tls:
+      httpsRedirect: true
+  ````
+
+  * **Définition d’un VirtualService multi-routes avec filtrage par URI** : les routes sont bien définies par match pour ``/auth, /llm, /ocr``, avec des redirections explicites vers les bons services et cela permet une gestion centralisée du routage via un unique point d’entrée ``api.m1info.com`` (scalable).
+  
+  * **Route par défaut vers auth-service** : route '/' pour rediriger les accès vers le service d’authentification, utile si quelqu’un accède à https://api.m1info.com/ sans chemin explicite.
+
+* **teste** :
+````bash
+# certificat :
+
+kubectl -n istio-system get secret
+
+NAME              TYPE                DATA   AGE
+istio-ca-secret   istio.io/ca-root    5      37h
+tls-secret        kubernetes.io/tls   2      27m   # <--
+
+
+# IP externe
+
+kubectl get svc istio-ingressgateway -n istio-system
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)                                                                      AGE
+istio-ingressgateway   LoadBalancer   10.107.115.196   10.107.115.196   15021:31132/TCP,80:32580/TCP,443:32690/TCP,31400:32403/TCP,15443:31283/TCP   37h
+
+# resolution de nom de domaine en locale :
+
+nano /etc/hosts
+
+127.0.0.1       localhost
+127.0.1.1       ARCADIA
+10.107.115.196  api.m1info.com  # <--
+
+````
+
+![test_https](/IMAGES/cert.png)
+****
+# Service Mesh
+````bash
+# Proxy :
+
+kubectl label namespace default istio-injection=enabled --overwrite
+
+kubectl get namespace default --show-labels
+
+NAME      STATUS   AGE   LABELS
+default   Active   44h   istio-injection=enabled,kubernetes.io/metadata.name=default
+
+# redeploiment des pods :
+
+kubectl rollout restart deployment auth-service
+kubectl rollout restart deployment llm-service
+kubectl rollout restart deployment ocr-service
+````
+
+* **Vérifier l'injection des sidecars proxy** :
+
+![inection_istio_proxy](/IMAGES/injction_proxy.png)
+
+* **Appliquer une DestinationRule** :
+````yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: default-destination-rule
+  namespace: default
+spec:
+  host: "*.default.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+````
+c'est pour pour activer la communication chiffrée (mTLS) entre les services du namespace default en utilisant Istio Mutual TLS.
+
+### Kiali
+````bash
+# installation et l'ajouts les pluggins
+istioctl install --set profile=demo -y
+
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.20/samples/addons/prometheus.yaml
+
+
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.20/samples/addons/grafana.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.22/samples/addons/kiali.yaml
+
+# lancer kiali :
+
+istioctl dashboard kiali
+
+````
+
+Pour tester on va juste s'authentifier et choisir le service ocr.
+
+![kiali](/IMAGES/kiali.png)
+
+****
+
+# GOOGLE LAB
+
+* **Aghilas OULD BRAHAM**
+
+![]()
+
+* **Sofiane AGOUNI KACI**
+
+![]()
