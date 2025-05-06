@@ -1,0 +1,77 @@
+# AUTH : auth-service qui ne fait que lire ses secrets
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: auth-role
+  namespace: default
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list"]
+---
+# LLM : il doit juste rcupérer une URL Webhook dans un Secret
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: llm-role
+  namespace: default
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  resourceNames: ["llm-secret"]
+  verbs: ["get"]
+---
+# OCR : il doit juste rcupérer une URL dans un Secret
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ocr-role
+  namespace: default
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  resourceNames: ["ocr-secret"]
+  verbs: ["get"]
+---
+# associer le Role au ServiceAccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: auth-binding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: auth-sacc
+  namespace: default
+roleRef:
+  kind: Role
+  name: auth-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: llm-binding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: llm-sacc
+  namespace: default
+roleRef:
+  kind: Role
+  name: llm-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ocr-binding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: ocr-sacc
+  namespace: default
+roleRef:
+  kind: Role
+  name: ocr-role
+  apiGroup: rbac.authorization.k8s.io

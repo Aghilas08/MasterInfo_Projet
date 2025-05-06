@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenue</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenue, {{ username }} 👋</h1>
+        <p>Que souhaitez-vous explorer ?</p>
+        <div class="choices">
+            <a href="https://api.m1info.com/llm"><button>Python</button></a>
+            <a href="https://api.m1info.com/ocr"><button>LateX-PDF</button></a>
+        </div>
+    </div>
+</body>
+</html>
