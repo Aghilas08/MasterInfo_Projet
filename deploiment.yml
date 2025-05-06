@@ -1,3 +1,4 @@
+# deploiment service authentification
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,15 +15,17 @@ spec:
       labels:
         app: auth-service
     spec:
+      serviceAccountName: auth-sacc
       containers:
       - name: auth-service
-        image: aghilasob/auth_app:01
+        image: aghilasob/auth_app:4
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
+          name: http
         env:
         - name: DB_HOST
-          value: "postgres" # nom du service postgresql
+          value: "postgres"
         - name: DB_PORT
           value: "5432"
         - name: DB_NAME
@@ -57,9 +60,12 @@ spec:
     app: auth-service
   type: LoadBalancer
   ports:
-  - port: 80
+  - name: http
+    port: 80
     targetPort: 5000
 ---
+# deploiment service llm
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -76,12 +82,14 @@ spec:
       labels:
         app: llm-service
     spec:
+      serviceAccountName: llm-sacc
       containers:
       - name: llm-service
-        image: aghilasob/llm_app:01
+        image: aghilasob/llm_app:2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5001
+          name: http
         env:
         - name: WEBHOOK_URL
           valueFrom:
@@ -105,9 +113,12 @@ spec:
     app: llm-service
   type: LoadBalancer
   ports:
-  - port: 80
+  - name: http
+    port: 80
     targetPort: 5001
 ---
+# deploiment service ocr
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -124,12 +135,14 @@ spec:
       labels:
         app: ocr-service
     spec:
+      serviceAccountName: ocr-sacc
       containers:
-      - name: ocr-container
-        image: aghilasob/ocr_app:01
+      - name: ocr-service
+        image: aghilasob/ocr_app:2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5002
+          name: http
         env:
         - name: GEMINI_AI_API_KEY
           valueFrom:
@@ -159,5 +172,85 @@ spec:
     app: ocr-service
   type: LoadBalancer
   ports:
-  - port: 80
+  - name: http
+    port: 80
     targetPort: 5002
+---
+# Gateway & VirtualService pour HTTPS
+
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: api-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "api.m1info.com"
+    tls:
+      httpsRedirect: true
+
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "api.m1info.com"
+    tls:
+      mode: SIMPLE
+      credentialName: tls-secret
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: services-routing
+  namespace: default
+spec:
+  hosts:
+  - "api.m1info.com"
+  gateways:
+  - istio-system/api-gateway
+  http:
+  - match:
+    - uri:
+        exact: "/auth"
+    - uri:
+        prefix: "/auth/"
+    route:
+    - destination:
+        host: auth-service
+        port:
+          number: 80
+  - match:
+    - uri:
+        exact: "/llm"
+    - uri:
+        prefix: "/llm/"
+    route:
+    - destination:
+        host: llm-service
+        port:
+          number: 80
+  - match:
+    - uri:
+        exact: "/ocr"
+    - uri:
+        prefix: "/ocr/"
+    route:
+    - destination:
+        host: ocr-service
+        port:
+          number: 80
+
+  # route par defaut pour le chemin '/'
+  - route:
+    - destination:
+        host: auth-service
+        port:
+          number: 80
