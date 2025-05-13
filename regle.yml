@@ -1,19 +1,32 @@
-apiVersion: networking.istio.io/v1
+apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
-  name: default-destination-rule
+  name: disable-mtls-llm
   namespace: default
 spec:
-  host: '*.default.svc.cluster.local'
+  host: llm-service.default.svc.cluster.local
   trafficPolicy:
     tls:
-      mode: ISTIO_MUTUAL
+      mode: DISABLE
 ---
-apiVersion: security.istio.io/v1beta1
-kind: PeerAuthentication
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
 metadata:
-  name: default-peerauth
+  name: disable-mtls-auth
   namespace: default
 spec:
-  mtls:
-    mode: STRICT
+  host: auth-service.default.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: disable-mtls-ocr
+  namespace: default
+spec:
+  host: ocr-service.default.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE
