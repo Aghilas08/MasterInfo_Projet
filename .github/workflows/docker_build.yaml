@@ -1,0 +1,25 @@
+name: Docker Images
+
+on:
+    - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Utilisation d une machine ubuntu
+
+    steps:
+      # verification du code source (checkout)
+      - name: Verifier le code
+        uses: actions/checkout@v3
+
+
+      # build les images docker pour chaque service (auth_service, LLM, OCR)
+      - name: Build Docker Images
+        run: |
+          
+          docker build -t auth_service ./auth_service/app
+          docker build -t llm ./LLM
+          docker build -t ocr ./OCR
+
+      - name: Afficher les images Docker
+        run: docker images
