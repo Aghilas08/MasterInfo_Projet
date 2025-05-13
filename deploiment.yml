@@ -85,7 +85,7 @@ spec:
       serviceAccountName: llm-sacc
       containers:
       - name: llm-service
-        image: aghilasob/llm_app:2
+        image: sofiane212/llm_app:1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5001
@@ -138,7 +138,7 @@ spec:
       serviceAccountName: ocr-sacc
       containers:
       - name: ocr-service
-        image: aghilasob/ocr_app:2
+        image: sofiane212/ocr_app:2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5002
@@ -232,6 +232,16 @@ spec:
         exact: "/llm"
     - uri:
         prefix: "/llm/"
+    route:
+    - destination:
+        host: llm-service
+        port:
+          number: 80
+  - match:
+    - uri: # pour l'envoi des requets http dans le service llm
+        exact: "/send"
+    - uri:
+        prefix: "/send/"
     route:
     - destination:
         host: llm-service
