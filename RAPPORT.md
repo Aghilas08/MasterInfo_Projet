@@ -388,7 +388,7 @@ Retourne uniquement le **code source LaTeX** complet, sans aucune explication.
 ````
 # Minikube dashbord
 
-![ts_les_services_dep](/IMAGES/dashbaord.png)
+![ts_les_services_dep](/IMAGES/dashboard.png)
 
 ****
 # Gateway via istio
@@ -555,6 +555,8 @@ metadata:
   
   * **Route par défaut vers auth-service** : route '/' pour rediriger les accès vers le service d’authentification, utile si quelqu’un accède à https://api.m1info.com/ sans chemin explicite.
 
+
+
 * **teste** :
 ````bash
 # certificat :
@@ -645,12 +647,38 @@ Pour tester on va juste s'authentifier et choisir le service ocr.
 
 ****
 
+# Au finale :
+
+* **En python je veux un programme qui fait la moyenne entre deux notes**
+
+![notes_py](/IMAGES/notes.png)
+
+* **le contenu du pdf c'est des images contenant des maths**
+[PDF TESTE](/OCR/uploads/final_image.pdf)
+
+![ocr_resltat](/IMAGES/math_ocr.png)
+
+![overleaf](/IMAGES/des_math.png)
+
 # GOOGLE LAB
 
 * **Aghilas OULD BRAHAM**
 
-![]()
+![aghilas](/IMAGES/aghilas.png)
 
 * **Sofiane AGOUNI KACI**
 
-![]()
+![sofiane](/IMAGES/sofiane.png)
+
+# Amélioration future :
+* **Améliorer la securité :**
+  * Sécuriser les images docker
+  * l'authentification
+  * la communication entre les services
+* Rendre le graphisme des sites web (plus attractives : chargement des fichiers dans le service OCR ...)
+
+* Elargir le nombre de rquetes dans le service llm (ici max 1000)
+
+* Si l'API est deployée dans un univers éducatif (univercité...) au lieu de faire une inscription (register), c'est a l'admin d'ajouter tous les etudiants (pour une premier connexion login : num etudian + date de naissance comme mot de passe , avec la possibilité de le changer).
+
+* Deploiment chez un cloud provider (solution cloud)
