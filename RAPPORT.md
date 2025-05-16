@@ -391,6 +391,19 @@ Retourne uniquement le **code source LaTeX** complet, sans aucune explication.
 ![ts_les_services_dep](/IMAGES/dashboard.png)
 
 ****
+* sert a vérifier si le code source fonctionne et que les images Docker pour tes services peuvent être construites correctement.
+* Il agit comme un test de validation pour éviter d’intégrer du code qui peut eroné le build Docker.
+
+* **Déclenchement :**
+````yaml
+on:
+  - pull_request
+
+````
+
+![teste_pipline](/IMAGES/pipline.png)
+
+****
 # Gateway via istio
 ````yaml
 apiVersion: networking.istio.io/v1alpha3
